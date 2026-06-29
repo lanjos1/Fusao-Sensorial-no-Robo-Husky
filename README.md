@@ -1,4 +1,4 @@
-# 🤖 Localização Husky — Fusão de Sensores com Filtro de Kalman Estendido no Robô Husky
+# Localização Husky — Fusão de Sensores com Filtro de Kalman Estendido no Robô Husky
 
 Pacote ROS para comparação de três configurações de localização usando o **Filtro de Kalman Estendido (EKF)** no ambiente simulado do LaR/UFBA, com o robô **Clearpath Husky** no Gazebo.
 
