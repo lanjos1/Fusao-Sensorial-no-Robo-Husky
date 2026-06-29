@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="mode" default="odom" doc="odom, odom_imu ou odom_imu_gps"/>
+  <arg name="wheel_odom_topic" default="/husky_velocity_controller/odom"/>
+  <arg name="imu_topic" default="/imu/data"/>
+  <arg name="fix_topic" default="/navsat/fix"/>
+  <arg name="model_name" default="husky"/>
+  <arg name="publish_gt" default="true"/>
+  <arg name="record_metrics" default="true"/>
+  <arg name="output_dir" default="$(find localizacao_husky)/results"/>
+  <arg name="align_gt_origin" default="false"/>
+  <arg name="gt_offset_x" default="0.0"/>
+  <arg name="gt_offset_y" default="0.0"/>
+
+  <group if="$(eval arg(&quot;wheel_odom_topic&quot;) != &quot;/wheel/odom&quot;)">
+    <node pkg="topic_tools" type="relay" name="relay_wheel_odom"
+          args="$(arg wheel_odom_topic) /wheel/odom"/>
+  </group>
+
+  <group if="$(eval arg(&quot;imu_topic&quot;) != &quot;/imu/data&quot;)">
+    <node pkg="topic_tools" type="relay" name="relay_imu"
+          args="$(arg imu_topic) /imu/data"/>
+  </group>
+
+  <group if="$(eval arg(&quot;mode&quot;) == &quot;odom_imu_gps&quot;)">
+    <group if="$(eval arg(&quot;fix_topic&quot;) != &quot;/fix&quot;)">
+      <node pkg="topic_tools" type="relay" name="relay_fix"
+            args="$(arg fix_topic) /fix"/>
+    </group>
+    <node pkg="localizacao_husky" type="gps_conversor.py" name="gps_to_odom" output="screen"/>
+  </group>
+
+  <group if="$(arg publish_gt)">
+    <node pkg="topic_tools" type="relay" name="relay_p3d_gt" 
+          args="/gazebo_ground_truth/odom /gt/odom"/>
+  </group>
+
+  <group if="$(eval arg(&quot;mode&quot;) == &quot;odom&quot;)">
+    <rosparam command="load" ns="ekf_localization" file="$(find localizacao_husky)/config/ekf_config_odom.yaml"/>
+  </group>
+  <group if="$(eval arg(&quot;mode&quot;) == &quot;odom_imu&quot;)">
+    <rosparam command="load" ns="ekf_localization" file="$(find localizacao_husky)/config/ekf_config_odom_imu.yaml"/>
+  </group>
+  <group if="$(eval arg(&quot;mode&quot;) == &quot;odom_imu_gps&quot;)">
+    <rosparam command="load" ns="ekf_localization" file="$(find localizacao_husky)/config/ekf_config_odom_imu_gps.yaml"/>
+  </group>
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" output="screen"/>
+
+  <group if="$(arg record_metrics)">
+    <node pkg="localizacao_husky" type="metricas.py" name="metrics" output="screen">
+      <param name="run_name" value="$(arg mode)"/>
+      <param name="output_dir" value="$(arg output_dir)"/>
+      <param name="align_gt_origin" value="$(arg align_gt_origin)"/>
+      <param name="gt_offset_x" value="$(arg gt_offset_x)"/>
+      <param name="gt_offset_y" value="$(arg gt_offset_y)"/>
+    </node>
+  </group>
+</launch>
