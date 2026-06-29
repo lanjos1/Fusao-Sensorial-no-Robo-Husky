@@ -179,11 +179,11 @@ A odometria sozinha acumulou muitos erros ao longo do tempo, com RMSE de posiç�
 
 ### ODOM + IMU
 
-A adição da IMU não alterou de forma significativa o RMSE de posição (1.46 m), mas eliminou muito do erro de orientação, o RMSE Yaw caiu de **1.56 rad para 0.0015 rad**, uma redução de ~1000×, o que mostra que a IMU é fundamental para estabilizar a estimativa de direção, ainda que sem informação posicional absoluta o drift acumulado nas coordenadas x/y continue.
+A adição da IMU não alterou muito o RMSE de posição (1.46 m), no entanto eliminou muito do erro de orientação, o RMSE Yaw caiu de **1.56 rad para 0.0015 rad**, uma redução de ~1000×, o que mostra que a IMU estabiliza a estimativa de direção, mesmo que sem informação posicional absoluta o drift acumulado nas coordenadas x/y continue.
 
 ### ODOM + IMU + GPS
 
-A fusão completa com GPS foi a configuração com melhor desempenho geral. O RMSE de posição caiu para **0.586 m** e o erro final de posição convergiu para **0.92 mm**, demonstrando que a informação absoluta de posição do GPS corrige o drift acumulado muito bem, além disso a orientação permaneceu precisa por causa da IMU.
+A fusão com GPS foi a configuração com melhor desempenho geral. O RMSE de posição caiu para **0.586 m** e o erro final de posição convergiu para **0.92 mm**. Logo é visivél como a informação absoluta de posição do GPS corrige o drift acumulado muito bem, além disso a orientação permaneceu precisa por causa da IMU.
 
 ### Conclusão
 
