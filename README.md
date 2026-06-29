@@ -24,17 +24,16 @@ O GPS (latitude/longitude) é convertido para coordenadas locais x/y e publicado
 localizacao_husky/
 ├── bags/                    # Bag ROS com os dados de sensores
 ├── config/                  # Arquivos .yaml de configuração do robot_localization
-│   ├── ekf_odom.yaml
-│   ├── ekf_odom_imu.yaml
-│   └── ekf_odom_imu_gps.yaml
+│   ├── ekf_config_odom.yaml
+│   ├── ekf_config_odom_imu.yaml
+│   └── ekf_config_odom_imu_gps.yaml
 ├── launch/                  # Launch files para cada configuração
-│   ├── ekf_odom.launch
-│   ├── ekf_odom_imu.launch
-│   └── ekf_odom_imu_gps.launch
+│   ├── configs.launch
+│   ├── main.launch
 ├── scripts/                 # Scripts Python de conversão, avaliação e plotagem
-│   ├── gps_to_odom.py       # Converte /navsat/fix → /gps/odom
-│   ├── evaluate.py          # Calcula métricas RMSE e erro final
-│   └── plot_results.py      # Gera os gráficos
+│   ├── gps_conversor.py       # Converte /navsat/fix → /gps/odom
+│   ├── metricas.py          # Calcula métricas RMSE e erro final de cada modo
+│   └── resultados.py      # Gera os gráficos
 ├── results/                 # Métricas e gráficos gerados automaticamente
 ├── images/                  # Gráficos de referência incluídos no README
 │   ├── Trajetorias.png
@@ -104,7 +103,7 @@ export LIBGL_ALWAYS_SOFTWARE=1
 
 ---
 
-## 🔧 Instalação do Pacote
+## Instalação do Pacote
 
 Dentro do container, criar um link simbólico do volume montado para o workspace de compilação:
 
@@ -122,7 +121,7 @@ source devel/setup.bash
 
 ---
 
-## ▶️ Execução
+## Execução
 
 O script `Fusion.sh` executa **automaticamente** as três configurações em sequência, processa a bag, calcula as métricas e gera os gráficos em `results/`:
 
@@ -171,7 +170,7 @@ O script realiza, para cada configuração:
 
 ---
 
-## 🔍 Discussão dos Resultados
+## Discussão dos Resultados
 
 ### ODOM (apenas odometria)
 
@@ -195,7 +194,7 @@ A fusão `ODOM + IMU + GPS` via EKF é a abordagem mais indicada para localizaç
 
 ---
 
-## 🛠️ Dependências
+## Dependências
 
 - ROS Noetic
 - `robot_localization` (pacote EKF/UKF)
