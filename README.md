@@ -14,7 +14,8 @@ Esta atividade avalia o impacto progressivo da fusão de sensores na qualidade d
 | **ODOM + IMU** | Odometria + IMU |
 | **ODOM + IMU + GPS** | Odometria + IMU + GPS (convertido para x/y local) |
 
-O GPS (latitude/longitude) é convertido para coordenadas locais x/y e publicado como `nav_msgs/Odometry` no tópico `/gps/odom`. O tópico `/gt/odom` é usado **exclusivamente como ground truth** — nunca como entrada do filtro.
+O GPS (latitude/longitude) é convertido para coordenadas locais x/y e publicado como `nav_msgs/Odometry` no tópico `/gps/odom`. 
+O tópico `/gt/odom` é usado **exclusivamente como ground truth** — nunca como entrada do filtro.
 
 ---
 
@@ -174,19 +175,19 @@ O script realiza, para cada configuração:
 
 ### ODOM (apenas odometria)
 
-A odometria isolada acumulou erros expressivos ao longo do tempo, com RMSE de posição de **1.46 m** e, principalmente, um erro de orientação elevado (**RMSE Yaw ≈ 1.56 rad ≈ 89°**). Isso evidencia o problema clássico de *drift* da odometria de rodas, onde pequenos erros se acumulam monotonicamente e a ausência de qualquer correção angular resulta em uma trajetória estimada completamente divergente do trajeto real.
+A odometria sozinha acumulou muitos erros ao longo do tempo, com RMSE de posição de **1.46 m** e um erro de orientação grande (**RMSE Yaw ≈ 1.56 rad ≈ 89°**), o que mostra o problema de *drift* da odometria de rodas, onde pequenos erros se acumularam e a falta de qualquer correção angular gerou uma trajetória estimada completamente divergente do trajeto real.
 
 ### ODOM + IMU
 
-A adição da IMU não alterou significativamente o RMSE de posição (1.46 m), mas eliminou praticamente todo o erro de orientação — o RMSE Yaw caiu de **1.56 rad para 0.0015 rad**, uma redução de ~1000×. Isso confirma que a IMU é fundamental para estabilizar a estimativa de heading, ainda que sem informação posicional absoluta o drift acumulado nas coordenadas x/y persista.
+A adição da IMU não alterou de forma significativa o RMSE de posição (1.46 m), mas eliminou muito do erro de orientação, o RMSE Yaw caiu de **1.56 rad para 0.0015 rad**, uma redução de ~1000×, o que mostra que a IMU é fundamental para estabilizar a estimativa de direção, ainda que sem informação posicional absoluta o drift acumulado nas coordenadas x/y continue.
 
 ### ODOM + IMU + GPS
 
-A fusão completa com GPS foi a configuração com melhor desempenho geral. O RMSE de posição caiu para **0.586 m** e o erro final de posição convergiu para apenas **0.92 mm**, demonstrando que a informação absoluta de posição do GPS corrige efetivamente o drift acumulado. A orientação permaneceu precisa (herdada da IMU). Esta configuração é a mais próxima de um sistema de localização robusto para robôs móveis em ambientes externos.
+A fusão completa com GPS foi a configuração com melhor desempenho geral. O RMSE de posição caiu para **0.586 m** e o erro final de posição convergiu para **0.92 mm**, demonstrando que a informação absoluta de posição do GPS corrige o drift acumulado muito bem, além disso a orientação permaneceu precisa por causa da IMU.
 
 ### Conclusão
 
-Os resultados demonstram o ganho progressivo e complementar de cada sensor:
+Os resultados demonstraram os ganhos de cada sensor:
 - **IMU** → corrige orientação, não posição
 - **GPS** → corrige posição absoluta, elimina drift
 
