@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>localizacao_husky</name>
+  <version>0.1.0</version>
+  <description>Pacote para comparacao de configuracoes do Filtro de Kalman no Husky</description>
+
+  <maintainer email="ludmila.n.anjos@gmail.com">Ludmila Anjos</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
+
+  <export/>
+</package>
